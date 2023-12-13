@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #slider-container {
+      position: relative;
+      width: 80%;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    #slider {
+      display: flex;
+      transition: transform 2s ease-in-out;
+      position: relative;
+    }
+
+    .slide {
+      width: 100%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .nav-buttons {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .nav-button {
+      cursor: pointer;
+      padding: 5px 10px;
+      margin: 0 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f4f4f4;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+    <div id="slider-container">
+        <div id="slider">
+          <div class="slide"><img src="https://via.placeholder.com/460x300?text=image_0" alt="Image 0"></div>
+          <div class="slide"><img src="https://via.placeholder.com/460x300?text=image_1" alt="Image 1"></div>
+          <div class="slide"><img src="https://via.placeholder.com/460x300?text=image_2" alt="Image 2"></div>
+          <div class="slide"><img src="https://via.placeholder.com/460x300?text=image_3" alt="Image 3"></div>
+        </div>
+      </div>
+      
+      <div id="nav-buttons">
+        <div class="nav-button" onclick="prevSlide()">이전</div>
+        <div class="nav-button" onclick="goToSlide(0)">0</div>
+        <div class="nav-button" onclick="goToSlide(1)">1</div>
+        <div class="nav-button" onclick="goToSlide(2)">2</div>
+        <div class="nav-button" onclick="goToSlide(3)">3</div>
+        <!-- Add more buttons as needed -->
+        <div class="nav-button" onclick="nextSlide()">다음</div>
+      </div>
+</div>
+
+<script>
+  const slider = document.getElementById('slider');
+  const navButtons = document.querySelectorAll('.nav-button');
+  let currentIndex = 0;
+  let intervalId;
+
+  function goToSlide(index) {
+    currentIndex = index - 1;
+    updateSlider();
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slider.children.length;
+    updateSlider();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slider.children.length) % slider.children.length;
+    updateSlider();
+  }
+
+  function updateSlider() {
+    const transformValue = -currentIndex * 100 + '%';
+    slider.style.transform = 'translateX(' + transformValue + ')';
+  }
+
+  function startAutoSlide() {
+    intervalId = setInterval(nextSlide, 3000); // 3 seconds interval, adjust as needed
+  }
+
+  function stopAutoSlide() {
+    clearInterval(intervalId);
+  }
+
+  navButtons.forEach((button, index) => {
+    button.addEventListener('click', () => goToSlide(index));
+  });
+
+  startAutoSlide();
+
+  // Pause auto slide on mouseover, resume on mouseout
+  slider.addEventListener('mouseover', stopAutoSlide);
+  slider.addEventListener('mouseout', startAutoSlide);
+</script>
+
+</body>
+</html>
